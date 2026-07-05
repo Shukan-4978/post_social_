@@ -13,7 +13,8 @@ const app = express();
 // Middlewares
 const allowedOrigins = [
     "http://localhost:5173",
-    "https://basic-post-social-froentend.vercel.app"
+    "https://basic-post-social-froentend.vercel.app",
+    "https://post-social-iota.vercel.app"
 ];
 
 if (process.env.FRONTEND_URL) {
