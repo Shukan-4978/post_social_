@@ -33,10 +33,14 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("/api/users", userRouter);
 app.use("/api/posts", postRouter);
 
-// Test route
-app.get('/',(req,res)=>{
-    res.send('API is running....')
-})
+// Test routes
+app.get('/', (req, res) => {
+    res.json({ message: 'PostSocial API is running successfully!' });
+});
+
+app.get('/api', (req, res) => {
+    res.json({ message: 'PostSocial API endpoint is active!' });
+});
 
 const PORT = process.env.PORT || 5000;
 
