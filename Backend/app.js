@@ -46,13 +46,15 @@ app.get('/api', (req, res) => {
 // Error handling middleware
 const multer = require('multer');
 app.use((err, req, res, next) => {
+    console.error("Global Error Middleware Caught:", err);
     if (err instanceof multer.MulterError) {
         if (err.code === 'LIMIT_FILE_SIZE') {
             return res.status(400).json({ message: 'Image is too large. Maximum size is 5MB.' });
         }
         return res.status(400).json({ message: err.message });
     }
-    res.status(500).json({ message: `Server error: ${err.message}`, error: err.message });
+    const errMsg = err.message && typeof err.message === 'string' ? err.message : JSON.stringify(err);
+    res.status(500).json({ message: `Server error: ${errMsg}`, error: errMsg });
 });
 
 const PORT = process.env.PORT || 5000;

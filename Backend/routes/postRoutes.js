@@ -44,7 +44,9 @@ postRouter.post('/', auth, upload.single('image'), async(req,res)=>{
 
         res.status(201).json(post);
     }catch(error){
-        res.status(500).json({ message: `Server error: ${error.message}`, error:error.message });
+        console.error("POST /api/posts Error:", error);
+        const errMsg = error.message && typeof error.message === 'string' ? error.message : JSON.stringify(error);
+        res.status(500).json({ message: `Server error: ${errMsg}`, error: errMsg });
     }
 });
 
