@@ -58,17 +58,19 @@ const handleComment = async (e) => {
   return (
     
     <Card sx={{ mb: 3 }}>
-      {post.image && (
-        <CardMedia
-          component="img"
-          image={`${API_BASE_URL}${post.image}`}
-          alt="post"
-          sx={{ maxHeight: 420, objectFit: 'cover' }}
-        />
-        
-      )}
-
-      <CardContent>
+        {post.image && (
+          <CardMedia
+            component="img"
+            image={post.image.startsWith('http') ? post.image : `${API_BASE_URL}${post.image}`}
+            alt="post"
+            sx={{ 
+              objectFit: 'contain',
+              maxHeight: '400px',
+              backgroundColor: 'black'
+            }}
+          />
+        )}
+        <CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
           <Avatar sx={{ bgcolor: 'primary.main' }}>{post.username[0].toUpperCase()}</Avatar>
           <Box>

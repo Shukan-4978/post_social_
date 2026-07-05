@@ -1,36 +1,33 @@
 const express = require('express');
 const multer = require('multer');
-const path = require('path');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
 const Post = require('../models/Post.js');
-const auth = require('../middleware/Auth.js')
+const auth = require('../middleware/Auth.js');
 
 const postRouter = express.Router();
 
-// Multer config for img
-const storage = multer.diskStorage({
-    destination: (req,file,cb)=> cb(null, path.join(__dirname, '..', 'uploads')),
-    filename:(req,file,cb)=>{
-        const uniqueName = Date.now() + '-' + file.originalname.replace(/\s+/g, '-');
-        cb(null, uniqueName)
-    }
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-const uplaod = multer({
-    storage,
-    limits:{fileSize: 5*1024*1024},
-    fileFilter: (req,file,cb)=> {
-        if(file.mimetype.startsWith('image/')){
-            cb(null, true);
-        }
-        else{
-            cb(new Error('Only image files are allowed'));
-        }
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'PostSocial',
+    allowedFormats: ['jpeg', 'png', 'jpg', 'webp'],
+  },
+});
 
-    }
+const upload = multer({
+    storage: storage,
+    limits:{fileSize: 5*1024*1024}
 });
 
 //post create a post with text, image or both
-postRouter.post('/', auth, uplaod.single('image'), async(req,res)=>{
+postRouter.post('/', auth, upload.single('image'), async(req,res)=>{
     try{
         const { text } = req.body;
 
@@ -42,7 +39,7 @@ postRouter.post('/', auth, uplaod.single('image'), async(req,res)=>{
             user: req.user.id,
             username: req.user.username,
             text: text || '',
-            image: req.file ? `/uploads/${req.file.filename}` : ''
+            image: req.file ? req.file.path : ''
         });
 
         res.status(201).json(post);
