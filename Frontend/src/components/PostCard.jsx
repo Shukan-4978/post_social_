@@ -17,7 +17,7 @@ import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '') : 'http://localhost:5000';
 
 const PostCard = ({ post, onUpdate }) => {
   const { user } = useAuth();
