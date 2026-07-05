@@ -52,7 +52,7 @@ app.use((err, req, res, next) => {
         }
         return res.status(400).json({ message: err.message });
     }
-    res.status(500).json({ message: 'Server error', error: err.message });
+    res.status(500).json({ message: `Server error: ${err.message}`, error: err.message });
 });
 
 const PORT = process.env.PORT || 5000;

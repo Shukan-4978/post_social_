@@ -44,7 +44,7 @@ postRouter.post('/', auth, upload.single('image'), async(req,res)=>{
 
         res.status(201).json(post);
     }catch(error){
-        res.status(500).json({ message: 'Server error', error:error.message });
+        res.status(500).json({ message: `Server error: ${error.message}`, error:error.message });
     }
 });
 
@@ -106,7 +106,7 @@ postRouter.post('/:id/comment', auth, async (req,res)=>{
         await post.save();
         res.json(post)
     }catch(error){
-        res.status(500).json({ message:"Server error", error:error.message});
+        res.status(500).json({ message: `Server error: ${error.message}`, error:error.message});
     }
 });
 
