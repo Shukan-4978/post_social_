@@ -43,6 +43,18 @@ app.get('/api', (req, res) => {
     res.json({ message: 'PostSocial API endpoint is active!' });
 });
 
+// Error handling middleware
+const multer = require('multer');
+app.use((err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+        if (err.code === 'LIMIT_FILE_SIZE') {
+            return res.status(400).json({ message: 'Image is too large. Maximum size is 5MB.' });
+        }
+        return res.status(400).json({ message: err.message });
+    }
+    res.status(500).json({ message: 'Server error', error: err.message });
+});
+
 const PORT = process.env.PORT || 5000;
 
 // Start server FIRST
